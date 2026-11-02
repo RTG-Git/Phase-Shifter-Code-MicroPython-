@@ -1,0 +1,54 @@
+import machine
+import time
+from machine import Pin
+from micropython import const
+import rp2
+
+# -------- User settings (physical pin numbers are shown) --------
+INPUT_GPIO = const(1)  # Physical pin 2
+OUTPUT_GPIOS = (2, 4, 6, 8, 28)  # Physical pins 4, 6, 9, 11, 34
+
+TARGET_1_NS = const(50)  # Output 1: physical pin 4 (GP2)
+TARGET_2_NS = const(50)  # Output 2: physical pin 6 (GP4)
+TARGET_3_NS = const(50)  # Output 3: physical pin 9 (GP6)
+TARGET_4_NS = const(50)  # Output 4: physical pin 11 (GP8)
+TARGET_5_NS = const(50)  # Output 5: physical pin 34 (GP28)
+
+ENABLE_1 = True
+ENABLE_2 = True
+ENABLE_3 = True
+ENABLE_4 = True
+ENABLE_5 = True
+
+PULSE_WIDTH_NS = const(48000)
+        sm = rp2.StateMachine(
+            index,
+            program,
+            freq=200_000_000,
+            in_base=input_pin,
+            set_base=Pin(gpio)
+        )
+        # The startup pulls run once, outside the PIO wrap region.
+        if delay_cycles != 1:
+            sm.put(delay_cycles - 2)
+           
+        if WIDTH_CYCLES > 33:
+            sm.put(WIDTH_LOOP_COUNT)
+           
+        machines[index] = sm
+        sm.active(1)
+       
+    print(
+        'Channel', channel,
+        'physical pin', PHYSICAL_OUTPUT_PINS[index],
+        'GP' + str(gpio),
+        'ON' if enabled else 'OFF',
+        'target', TARGETS_NS[index], 'ns'
+    )
+
+for channel in range(1, 6):
+    set_channel(channel, ENABLED[channel - 1])
+
+print('Clock:', machine.freq(), 'Hz; width:', PULSE_WIDTH_NS, 'ns')
+print('Assumed input-to-output overhead:', MEASURED_OVERHEAD_NS, 'ns')
+print('To switch while running: set_channel(3, False) or set_channel(3, True)')
